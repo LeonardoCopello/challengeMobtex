@@ -8,22 +8,76 @@
   <title>Document</title>
 
   <style>
+    * {
+      margin: 0;
+      font-size: 30px;
+    }
+    
+    #headerInfo {
+        display: flex;
+        flex-direction: row;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        min-width: 350px;
+    }
+    .divItens {
+        display: flex;
+        flex-direction: row;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        border: red 2px solid;
+        min-width: 350px;
+    }
+    .header {
+        width: 600px;
+        border: solid black 2px;
+    }
+    .dados {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 600px;
+    }
+    img {
+      width: 100px;
+    }
 
+    iframe {
+      width: 100px;
+    }
+
+    @media screen and (max-width: 510px) {
+  body {
+    background-color: greenyellow;
+  }
+  div {
+    font-size: 20px;
+  }
+  .divItens {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        border: red 2px solid;
+    }
+
+}
+    
   </style>
 </head>
 
-<body>
+<body>  
+      <div id="headerInfo">
+        <div class="header">ID</div>
+        <div class="header">NOME</div>
+        <div class="header">IMAGEM/VIDEO</div>
+      </div>
+      <div id="result" ></div>
+      <br>
 
-  <div id="resultados">teste</div>
-  <div>
-
-  </div>
-  <table id="result">
-    <th>ID</th>
-    <td>NOME</td>
-    <td>IMAGEM</td>
-
-  </table>
 </body>
 
 <script>
@@ -36,64 +90,58 @@
       exibeResultadosBusca();
 
       console.log(data);
-     
+
     })
     .catch(console.error);
 
 
 
   function exibeResultadosBusca() {
-    // let headTable = `<th>ID</th><th>NOME</th><th>IMAGEM</th>`;
-    let tabela = document.getElementById('result');
-    // tabela.innerHTML = headTable;
+   
     let lista = dados.data;
     for (let i = 0; i < lista.length; i++) {
-      let elmDataRow = document.createElement('tr'); // cria a linha
-      let elmDataRowId = document.createElement('td');
-      let elmDataRowName = document.createElement('td');
-      let elmDataRowImagem = document.createElement('td');
-      let nodeImagem = document.createElement('img');
-      console.log(nodeImagem);
-      elmDataRow.appendChild(elmDataRowId);
-      elmDataRow.appendChild(elmDataRowName);
-      elmDataRow.appendChild(elmDataRowImagem);
-      elmDataRowImagem.innerHTML = nodeImagem;
+        
+      let elmCabecalho = document.getElementById('result'); // cria a linha
+      let divDosItens = document.createElement('div');
+      divDosItens.className = "divItens";
 
+      let elmDataRowId = document.createElement('div'); // cria TD do ID
+      let elmDataRowName = document.createElement('div'); // cria TD do Nome
+      let elmDataRowLink = document.createElement('div'); // cria TD da Imagem
+      elmDataRowId.className = 'dados'; 
+      elmDataRowName.className = 'dados';  
+      elmDataRowLink.className = 'dados';   
+
+      divDosItens.appendChild(elmDataRowId);
+      divDosItens.appendChild(elmDataRowName);
+      divDosItens.appendChild(elmDataRowLink);
+
+      elmCabecalho.appendChild(divDosItens);
+    
       let idLista = dados.data[i].id;
       let nomeLista = dados.data[i].name;
-      let imagemLista = dados.data[i].img;
+      let linkLista = dados.data[i].img;
 
-      tabela.appendChild(elmDataRow);
-      console.log(idLista)
       elmDataRowId.innerHTML = idLista;
       elmDataRowName.innerHTML = nomeLista;
-      // elmDataRowImagem.innerHTML = imagemLista;
-      // nodeImagem.setAttribute('id',imagemLista);
-      // elmDataRowImagem.appendChild(nodeImagem);
-      elmDataRowImagem.innerHTML = imagemLista;
+      let verify = checkURL(linkLista);
+           
+      if (verify == true) {
+        let nodeLink = document.createElement('img');
+        nodeLink.setAttribute('src', `${linkLista}`);
+        elmDataRowLink.appendChild(nodeLink);
+      } else {
+        let nodeLink = document.createElement('iframe');
+        nodeLink.setAttribute('src', `${linkLista}`);
+        elmDataRowLink.appendChild(nodeLink);
+      } 
 
-
-
-
-
-
-
-
+      function checkURL(url) {
+        return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+      }
+  
     }
-
-    // let divLista = document.getElementById('resultados');
-    // let elmUl = document.createElement('ul');
-    // let elmLI = document.createElement('li');
-    // divLista.appendChild(elmUl);
-    // elmUl.appendChild(elmLI);
-    // elmLi.innerHTML = idLista;
-    // let idLista = data[0];
-    // let lista = dados.data.results;
-    // divLista.innerHTML = idLista;
-  };
-
-
-
+  }
 </script>
 
 
